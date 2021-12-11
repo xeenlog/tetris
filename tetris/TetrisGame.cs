@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace tetris
 {
     class TetrisGame
     {
-        private int gameFieldHeightInCells;
-        private int gameFieldWidthInCells;
-        private int cellSize;
+        private readonly int gameFieldHeightInCells;
+        private readonly int gameFieldWidthInCells;
+        private readonly int cellSize;
+        private int[,] map = new int[10, 20]; // 1 - заполненная клетка, 0 - пустая
+
+        private Point a = new Point(0, 4); // на основе буду заполнять map
+
+        private int[,] shape = new int[2, 2]
+        {
+            {1, 1},
+            {1, 1}
+        };
 
         public TetrisGame(int gameFieldHeightInCells, int gameFieldWidthInCells, int cellSize)
         {
@@ -20,8 +30,28 @@ namespace tetris
             this.cellSize = cellSize;
         }
 
-        public void Drow(Graphics graphics)
+        public void Draw(Graphics graphics)
         {
+            for (int i = 0; i < shape.GetLength(0); i++)
+            {
+                for (int j = 0; j < shape.GetLength(1); j++)
+                {
+                    if (shape[i, j] == 1)
+                        map[a.Y + i, a.X + j] = 1;
+                }
+            }
+
+            for (int i = 0; i < gameFieldWidthInCells; i++)
+            {
+                for (int j = 0; j < gameFieldHeightInCells; j++)
+                {
+                    if (map[i, j] == 1)
+                    {
+                        graphics.FillRectangle(Brushes.BlueViolet, i * cellSize, j * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+
             for (int i = 0; i <= gameFieldHeightInCells; i++)
             {
                 graphics.DrawLine(Pens.Black, 0, cellSize * i, cellSize * gameFieldWidthInCells, cellSize * i);

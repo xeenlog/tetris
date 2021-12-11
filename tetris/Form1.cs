@@ -21,12 +21,17 @@ namespace tetris
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            tetris.Drow(e.Graphics);
+            tetris.Draw(e.Graphics);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }
