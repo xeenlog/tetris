@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace tetris
 {
@@ -15,7 +16,11 @@ namespace tetris
         private readonly int cellSize;
         private int[,] map = new int[10, 20]; // 1 - заполненная клетка, 0 - пустая
 
-        private Point a = new Point(0, 4); // на основе буду заполнять map
+        private int startPositionX = 4;
+        private int startPositionY = 0;
+
+        private int speedX;
+        private int speedY;
 
         private int[,] shape = new int[2, 2]
         {
@@ -30,6 +35,12 @@ namespace tetris
             this.cellSize = cellSize;
         }
 
+        public void Restart()
+        {
+            speedX = 0;
+            speedY = 1;
+        }
+
         public void Draw(Graphics graphics)
         {
             for (int i = 0; i < shape.GetLength(0); i++)
@@ -37,7 +48,7 @@ namespace tetris
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
                     if (shape[i, j] == 1)
-                        map[a.Y + i, a.X + j] = 1;
+                        map[startPositionX + i, startPositionY + j] = 1;
                 }
             }
 
@@ -60,6 +71,36 @@ namespace tetris
             for (int j = 0; j <= gameFieldWidthInCells; j++)
             {
                 graphics.DrawLine(Pens.Black, cellSize * j, 0, cellSize * j, cellSize * gameFieldHeightInCells);
+            }
+        }
+
+        public void Update()
+        {
+            startPositionX += speedX;
+            startPositionY += speedY;
+
+            for (int i = 0; i < gameFieldWidthInCells; i++)
+            {
+                for (int j = 0; j < gameFieldHeightInCells; j++)
+                {
+                    if (map[i, j] == 1)
+                    {
+                        map[i, j] = 0;
+                    }
+                }
+            }
+        }
+
+        public void Move(Keys direction)
+        {
+            if (direction == Keys.Left)
+            {
+                speedX = -1;
+            }
+
+            if (direction == Keys.Right)
+            {
+                speedX = 1;
             }
         }
     }

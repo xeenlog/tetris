@@ -17,6 +17,7 @@ namespace tetris
         public Form1()
         {
             InitializeComponent();
+            tetris.Restart();
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -26,12 +27,14 @@ namespace tetris
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            
+            this.tetris.Update();
+            this.pictureBox1.Refresh();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-
+            this.tetris.Move(e.KeyCode);
+            this.pictureBox1.Refresh();
         }
     }
 }
