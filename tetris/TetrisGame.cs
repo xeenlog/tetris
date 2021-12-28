@@ -19,9 +19,6 @@ namespace tetris
         private int startPositionX = 4;
         private int startPositionY = 0;
 
-        private int speedX;
-        private int speedY;
-
         private int[,] shape = new int[2, 2]
         {
             {1, 1},
@@ -37,8 +34,7 @@ namespace tetris
 
         public void Restart()
         {
-            speedX = 0;
-            speedY = 1;
+
         }
 
         public void Draw(Graphics graphics)
@@ -76,9 +72,27 @@ namespace tetris
 
         public void Update()
         {
-            startPositionX += speedX;
-            startPositionY += speedY;
+            startPositionY += 1;
+            ClearArea();
+        }
 
+        public void Move(Keys direction)
+        {
+            switch (direction)
+            {
+                case Keys.Left:
+                    startPositionX--;
+                    ClearArea();
+                    break;
+                case Keys.Right:
+                    startPositionX++;
+                    ClearArea();
+                    break;
+            }
+        }
+
+        private void ClearArea()
+        {
             for (int i = 0; i < gameFieldWidthInCells; i++)
             {
                 for (int j = 0; j < gameFieldHeightInCells; j++)
@@ -88,19 +102,6 @@ namespace tetris
                         map[i, j] = 0;
                     }
                 }
-            }
-        }
-
-        public void Move(Keys direction)
-        {
-            if (direction == Keys.Left)
-            {
-                speedX = -1;
-            }
-
-            if (direction == Keys.Right)
-            {
-                speedX = 1;
             }
         }
     }
