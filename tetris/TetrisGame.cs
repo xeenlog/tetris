@@ -14,15 +14,16 @@ namespace tetris
         private readonly int gameFieldHeightInCells;
         private readonly int gameFieldWidthInCells;
         private readonly int cellSize;
-        private int[,] map = new int[10, 20]; // 1 - заполненная клетка, 0 - пустая
+        private int[,] map = new int[20, 10]; // 1 - заполненная клетка, 0 - пустая
 
         private int startPositionX = 4;
         private int startPositionY = 0;
 
-        private int[,] shape = new int[2, 2]
+        private int[,] shape = new int[3, 3]
         {
-            {1, 1},
-            {1, 1}
+            {0, 0, 0},
+            {1, 1, 0},
+            {0, 1, 1}
         };
 
         public TetrisGame(int gameFieldHeightInCells, int gameFieldWidthInCells, int cellSize)
@@ -44,17 +45,17 @@ namespace tetris
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
                     if (shape[i, j] == 1)
-                        map[startPositionX + i, startPositionY + j] = 1;
+                        map[startPositionY + i, startPositionX + j] = 1;
                 }
             }
 
-            for (int i = 0; i < gameFieldWidthInCells; i++)
+            for (int i = 0; i < gameFieldHeightInCells; i++)
             {
-                for (int j = 0; j < gameFieldHeightInCells; j++)
+                for (int j = 0; j < gameFieldWidthInCells; j++)
                 {
                     if (map[i, j] == 1)
                     {
-                        graphics.FillRectangle(Brushes.BlueViolet, i * cellSize, j * cellSize, cellSize, cellSize);
+                        graphics.FillRectangle(Brushes.BlueViolet, j * cellSize, i * cellSize, cellSize, cellSize);
                     }
                 }
             }
@@ -72,7 +73,7 @@ namespace tetris
 
         public void Update()
         {
-            startPositionY += 1;
+            startPositionY++;
             ClearArea();
         }
 
@@ -88,14 +89,18 @@ namespace tetris
                     startPositionX++;
                     ClearArea();
                     break;
+                case Keys.Down:
+                    startPositionY++;
+                    ClearArea();
+                    break;
             }
         }
 
         private void ClearArea()
         {
-            for (int i = 0; i < gameFieldWidthInCells; i++)
+            for (int i = 0; i < gameFieldHeightInCells; i++)
             {
-                for (int j = 0; j < gameFieldHeightInCells; j++)
+                for (int j = 0; j < gameFieldWidthInCells; j++)
                 {
                     if (map[i, j] == 1)
                     {
