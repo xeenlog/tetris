@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,12 +19,13 @@ namespace tetris
 
         private int startPositionX = 4;
         private int startPositionY = 0;
+        
 
         private int[,] shape = new int[3, 3]
         {
             {0, 0, 0},
-            {1, 1, 0},
-            {0, 1, 1}
+            {0, 1, 0},
+            {0, 0, 0}
         };
 
         public TetrisGame(int gameFieldHeightInCells, int gameFieldWidthInCells, int cellSize)
@@ -82,7 +84,10 @@ namespace tetris
             switch (direction)
             {
                 case Keys.Left:
-                    startPositionX--;
+                    if (CheckLeftBorder())
+                    {
+                        startPositionX--;
+                    }
                     ClearArea();
                     break;
                 case Keys.Right:
@@ -108,6 +113,53 @@ namespace tetris
                     }
                 }
             }
+        }
+
+        private bool CheckLeftBorder()
+        {
+            for (int x = 0; x < 3; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    switch (x)
+                    {
+                        case 0:
+                            if (shape[y, x] == 1 && startPositionX > 0)
+                            {
+                                return true;
+                            }
+                            break;
+                        case 1:
+                            if (shape[y, x] == 1 && startPositionX + 1 > 0 && CheckColumnOne())
+                            {
+                                return true;
+                            }
+                            break;
+                        case 2:
+                            if (shape[y, x] == 1 && startPositionX + 2 > 0 && CheckColumnTwo())
+                            {
+                                return true;
+                            }
+                            break;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool CheckColumnOne()
+        {
+            return shape[0, 0] == 0 && 
+                   shape[1, 0] == 0 && 
+                   shape[2, 0] == 0;
+        }
+
+        private bool CheckColumnTwo()
+        {
+            return shape[0, 1] == 0 &&
+                   shape[1, 1] == 0 &&
+                   shape[2, 1] == 0 &&
+                   CheckColumnOne();
         }
     }
 }
