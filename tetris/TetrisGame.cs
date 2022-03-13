@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -75,8 +74,14 @@ namespace tetris
 
         public void Update()
         {
-            startPositionY++;
             ClearArea();
+            startPositionY++;
+            if (startPositionY == gameFieldHeightInCells - 2)
+            {
+                map[gameFieldHeightInCells - 1, startPositionX + 1] = 1;
+                startPositionX = 4;
+                startPositionY = 0;
+            }
         }
 
         public void Move(Keys direction)
@@ -84,32 +89,32 @@ namespace tetris
             switch (direction)
             {
                 case Keys.Left:
+                    ClearArea();
                     if (CheckLeftBorder())
                     {
                         startPositionX--;
                     }
-                    ClearArea();
                     break;
                 case Keys.Right:
-                    startPositionX++;
                     ClearArea();
+                    startPositionX++;
                     break;
                 case Keys.Down:
-                    startPositionY++;
                     ClearArea();
+                    startPositionY++;
                     break;
             }
         }
 
         private void ClearArea()
         {
-            for (int i = 0; i < gameFieldHeightInCells; i++)
+            for (int y = startPositionY; y < startPositionY + 3; y++)
             {
-                for (int j = 0; j < gameFieldWidthInCells; j++)
+                for (int x = startPositionX; x < startPositionX + 3; x++)
                 {
-                    if (map[i, j] == 1)
+                    if (x >= 0 && y >= 0 && x < gameFieldWidthInCells && y < gameFieldHeightInCells)
                     {
-                        map[i, j] = 0;
+                        map[y, x] = 0;
                     }
                 }
             }
