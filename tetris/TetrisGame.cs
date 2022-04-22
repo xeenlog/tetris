@@ -33,12 +33,7 @@ namespace tetris
             this.gameFieldWidthInCells = gameFieldWidthInCells;
             this.cellSize = cellSize;
         }
-
-        public void Restart()
-        {
-
-        }
-
+        
         public void Draw(Graphics graphics)
         {
             for (int i = 0; i < shape.GetLength(0); i++)
